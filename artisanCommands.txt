@@ -1,0 +1,3 @@
+php artisan list = GET ALL THE ARTISAN COMMANDS
+
+php artisan make:controller [options] {Controller name} = create a new controller php file
