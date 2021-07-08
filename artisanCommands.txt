@@ -1,3 +1,7 @@
 php artisan list = GET ALL THE ARTISAN COMMANDS
 
+php artisan serve = run the server
 php artisan make:controller [options] {Controller name} = create a new controller php file
+php artisan present {framework of choice} 
+
+# To compile css and js files you must edit the webpack.mix.js and run dev or run watch

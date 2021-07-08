@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\PagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,18 +15,18 @@ use App\Http\Controllers\ProductsController;
 */
 
 // Default route -> return view
-Route::get('/', function () {
-    # Referring to .env file
-    // return env('CREATOR_NAME');
-    return view('home');
-});
+Route::get('/', [PagesController::class, 'index']);
+Route::get('/about', [PagesController::class, 'about']);
+
+# Referring to .env file
+// return env('CREATOR_NAME');
 
 /* When using a controller you name it first with ::class and 2nd argument is the fn we want to use
     Laravel 8 (New)
 */
 # name => named routes, easy to navigate using the route global method in the view components
-Route::get('/products', [ProductsController::class, 'index'])->name('products');
-Route::get('/products/about', [ProductsController::class, 'about'])->name('about');
+// Route::get('/products', [ProductsController::class, 'index'])->name('products');
+// Route::get('/products/about', [ProductsController::class, 'about'])->name('about');
 
 # Route parameters => Pattern is integer
 // Passing a regex to where to make the parameter follow a patern, if it fails it returns a 404 page
@@ -36,10 +36,10 @@ Route::get('/products/about', [ProductsController::class, 'about'])->name('about
 // Route::get('/products/{name}', [ProductsController::class, 'show'])->where('name', '[a-zA-Z]+');
 
 # Multiple parametters with pattern
-Route::get('/products/{name}/{id}', [ProductsController::class, 'show'])->where([
-    'name' => '[a-zA-Z]+',
-    'id' => '[0-9]+',
-]);
+// Route::get('/products/{name}/{id}', [ProductsController::class, 'show'])->where([
+//     'name' => '[a-zA-Z]+',
+//     'id' => '[0-9]+',
+// ]);
 
 /*
     Another laravel 8 way
