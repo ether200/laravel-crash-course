@@ -1,0 +1,128 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Car;
+
+class CarsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+
+    // RETRIEVE DATA
+
+    {
+        // SELECT * FROM cars
+        $cars = Car::all();
+
+        // GET SPECIFIC
+        // If it doesn't exist thanks to firstOrFail it will throw a 404 page
+        // $cars = Car::where('name', '=', 'audi')->firstOrFail();
+
+        // it breaks the query in chunks
+        // $cars = Car::chunk(2, function ($cars) {
+        //     foreach($cars as $car) 
+        //         print_r($car);
+        // });
+
+        return view('cars.index', [
+            'cars' => $cars
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('cars.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // Since we're creating we need to use store method
+        // $car = new Car;
+        // $car->name = $request->input('name');
+        // $car->founded = $request->input('founded');
+        // $car->description = $request->input('description');
+        // Unless you use the save method, the instance won't save in db
+        // $car->save();
+
+        $car = Car::create([
+            'name' => $request->input('name'),
+            'founded' => $request->input('founded'),
+            'description' => $request->input('description')
+        ]);
+
+        return redirect('/cars');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        // Find returns an array, with first we get the object out of it
+        $car = Car::find($id)->first();
+        return view('cars.edit')->with('car', $car);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $car = Car::where('id', $id)->update([
+            'name' => $request->input('name'),
+            'founded' => $request->input('founded'),
+            'description' => $request->input('description')
+        ]);
+
+        return redirect('/cars');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $car = Car::where('id', $id)->first();
+
+        $car->delete();
+
+        return redirect('/cars');
+    }
+}

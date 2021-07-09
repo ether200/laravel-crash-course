@@ -1,7 +1,25 @@
 php artisan list = GET ALL THE ARTISAN COMMANDS
 
 php artisan serve = run the server
-php artisan make:controller [options] {Controller name} = create a new controller php file
+php artisan make:controller [options] {Controller name} -- = create a new controller php file
+php artisan make:controller {controller name} --resource add crud functions
+php artisan make:model {Model name} -m [optional make a migration with it] create a new model php file
+php artisan migrate:reset WILL run the down method, meaning it will undo the migration
+php artisan migrate:refresh WILL reset the changes back
+php artisan migrate:fresh WILL RESET AND THEN REFRESH all the migrations
+php artisan migrate:status will SHOW all the migration wether they ran or not
 php artisan present {framework of choice} 
+php artisan make:factory {name} --model={ModelName}
+php artisan tinker = a console to add dummy data
+php artisan route:list -> PRINTS A LIST OF AVAILABLE ROUTES
+-> specify the path of the model \App\Models\Post::factory()->create();
+factory()->count({ amount of rows you want to add })
 
 # To compile css and js files you must edit the webpack.mix.js and run dev or run watch
+
+### SQL
+mysql -u {username} -p
+create database {name}
+use {dbname}
+show tables;
+desc {tablename};

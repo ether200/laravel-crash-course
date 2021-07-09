@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\CarsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +19,12 @@ use App\Http\Controllers\PagesController;
 // Default route -> return view
 Route::get('/', [PagesController::class, 'index']);
 Route::get('/about', [PagesController::class, 'about']);
+
+// Posts endpoint
+Route::get('/posts', [PostsController::class, 'index']);
+
+Route::resource('/cars', CarsController::class);
+
 
 # Referring to .env file
 // return env('CREATOR_NAME');
