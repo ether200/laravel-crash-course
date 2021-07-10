@@ -20,6 +20,16 @@ class CreateCarsTable extends Migration
             $table->longText('description');
             $table->timestamps();
         });
+
+        Schema::create('car_models', function(Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('car_id');
+            $table->string('model_name');
+            $table->timestamps();
+            # Foreign is card id which references to the cars table id
+            # onDelete, if you delete the car, we want to delete the model related aswell with cascade, otherwise we use set null
+            $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');
+        });
     }
 
     /**

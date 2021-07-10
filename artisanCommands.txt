@@ -12,8 +12,11 @@ php artisan present {framework of choice}
 php artisan make:factory {name} --model={ModelName}
 php artisan tinker = a console to add dummy data
 php artisan route:list -> PRINTS A LIST OF AVAILABLE ROUTES
+php artisan make:rule Uppercase for example -> make a rules folder which a class with methods to make validation rules
+php artisan make:request {name} -> create a request file where we can add rules or authorize
 -> specify the path of the model \App\Models\Post::factory()->create();
 factory()->count({ amount of rows you want to add })
+
 
 # To compile css and js files you must edit the webpack.mix.js and run dev or run watch
 

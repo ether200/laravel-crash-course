@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Car;
+use App\Models\Product;
+use App\Rules\Uppercase;
+use App\Http\Requests\CreateValidationRequest;
 
 class CarsController extends Controller
 {
@@ -19,6 +22,7 @@ class CarsController extends Controller
     {
         // SELECT * FROM cars
         $cars = Car::all();
+        //$cars = Car::all()->toArray() | toJson()
 
         // GET SPECIFIC
         // If it doesn't exist thanks to firstOrFail it will throw a 404 page
@@ -51,6 +55,7 @@ class CarsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    // Adding an instance of custom request instead
     public function store(Request $request)
     {
         // Since we're creating we need to use store method
@@ -61,10 +66,58 @@ class CarsController extends Controller
         // Unless you use the save method, the instance won't save in db
         // $car->save();
 
+        # Validate value from input
+        // $request->validate([
+        //     # check if name already exist
+        //     # can use two ways
+        //     'name' => ['required'], ['unique:cars'],
+        //     # use custom rule
+        //     // 'name' => new Uppercase,
+        //     # check for integer and add min and max
+        //     'founded' => 'required|integer|min:0|max:2021',
+        //     'description' => 'required'
+        // ]);
+
+        // $request->validated();
+
+        # Validate FOR IMAGE UPLOAD
+
+        # Methods we can use on the request
+        //guessExtension() -> SHOWS the extension of the file
+        // getMimeType() -> SHOWS type and extension file/jpeg
+        // store()
+        // asStore()
+        // storePublicly
+        // move()
+        // getClientOriginalName() -> returns current file name
+        // getClientMimeType -> same as getMimeType
+        // getSize -> Current size in kb
+        // getError() -> 0 if it's false
+        // isValid() -> same as error but true or false
+
+        // $test = $request->file('image')->guessExtension();
+
+        $request->validate([
+            'name' => 'required',
+            'founded' => 'required|integer|min:0|max:2021',
+            'description' => 'required',
+            'image' => 'required|mimes:jpg,png,jpeg|max:5048'
+        ]);
+
+        # Format image's file name and then store
+        $newImageName = time() . '-' . $request->name . '.' . $request->image->extension();
+
+        $request->image->move(public_path('images'), $newImageName); // return info like path file name etc
+
+
+        # If it's valid it will proceed
+        # If it's not valid, it will throw ValidationException and redirect to previous page
+
         $car = Car::create([
             'name' => $request->input('name'),
             'founded' => $request->input('founded'),
-            'description' => $request->input('description')
+            'description' => $request->input('description'),
+            'image_path' => $newImageName,
         ]);
 
         return redirect('/cars');
@@ -78,6 +131,9 @@ class CarsController extends Controller
      */
     public function show($id)
     {
+        $car = Car::find($id);
+        $products = Product::find($id);
+        return view('cars.show')->with('car', $car);
     }
 
     /**
@@ -100,8 +156,12 @@ class CarsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CreateValidationRequest $request, $id)
     {
+
+        # To avoid code repetition we replaced request to our custom request with rules
+        $request->validated();
+
         $car = Car::where('id', $id)->update([
             'name' => $request->input('name'),
             'founded' => $request->input('founded'),
